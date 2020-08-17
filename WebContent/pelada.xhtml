@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<ui:composition template="_template.xhtml">
+	
+		<f:metadata>
+			<f:viewParam name="peladaId" value="#{peladaBean.pelada.id}" />
+			<f:viewAction action="#{livroBean.carregarPeladaPelaId}" if="#{param.peladaId != null}" />
+		</f:metadata>
+	
+
+		<ui:define name="titulo">
+				Nova Pelada
+		</ui:define>
+
+		<ui:define name="conteudo">
+			<h:form>
+
+				<h:messages id="messages" />
+
+				<fieldset>
+					<legend>Dados da Pelada</legend>
+					<p:panelGrid columns="2">
+
+						<p:outputLabel value="Nome do Evento:" for="nome" />
+						<p:inputText id="nome" value="#{peladaBean.pelada.nome}"
+							required="true" requiredMessage="nome obrigatório"
+							validatorMessage="Nome não pode ser superior a 40">
+							<f:validateLength maximum="40" />
+							<f:ajax event="blur" render="messages" />
+						</p:inputText>
+
+						<p:outputLabel value="Local:" for="local" />
+						<p:inputText id="local" value="#{peladaBean.pelada.local}" />
+						
+						<p:outputLabel value="Hora:" for="hora" />
+						<p:calendar id="hora" value="#{peladaBean.pelada.hora}" pattern="HH:mm" />
+
+						<p:outputLabel value="Data da Pelada:" for="dataPelada" />
+						<p:calendar id="dataPelada" value="#{peladaBean.pelada.data}" pattern="dd/MM/yyyy" />
+						
+
+					</p:panelGrid>
+
+				</fieldset>
+	
+				<fieldset>
+					<legend>Dados do Usuario</legend>
+
+					<p:outputLabel value="Usuarios Cadastrados:" for="usuario" />
+					<p:selectOneMenu value="#{peladaBean.usuarioId}" id="usuario"  effect="fold" style="width:210px">  
+						<f:selectItems value="#{peladaBean.usuarios}" var="usuario"
+							itemLabel="#{usuario.nomeCompleto}" itemValue="#{usuario.id}" />
+					</p:selectOneMenu>
+					
+	
+					<br />
+	
+					<p:commandLink value="Cadastrar novo Usuario"
+						action="#{peladaBean.formUsuario}" immediate="true" />
+	
+				</fieldset>
+				
+				<p:commandButton value="Gravar"  action="#{peladaBean.gravar}"  
+                                     update="tabelaPeladas" 
+                                     ajax="false"
+                                     process="@form">
+                </p:commandButton> 
+			
+			
+			    <p:dataTable value="#{peladaBean.getPeladas()}" var="pelada" id="tabelaPeladas">
+				<p:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{pelada.nome}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Local</f:facet>
+					<h:outputText value="#{pelada.local}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Data</f:facet>
+					<h:outputText value="#{pelada.data.time}">
+						<f:convertDateTime pattern="dd/MM/yyyy"
+							timeZone="America/Sao_Paulo" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Hora</f:facet>
+					<h:outputText value="#{pelada.hora}">
+					<f:convertDateTime pattern=" HH:mm"	timeZone="America/Sao_Paulo" />
+					</h:outputText>
+				</p:column>
+				
+				
+			    </p:dataTable>
+			</h:form>			
+		</ui:define>
+	</ui:composition>
+
+</html>

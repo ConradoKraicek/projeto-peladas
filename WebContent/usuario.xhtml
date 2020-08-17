@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<ui:composition template="_template.xhtml">
+	
+		<f:metadata>
+			<f:viewParam name="usuarioId" value="#{usuarioBean.usuarioId}" />
+			<f:viewAction action="#{usuarioBean.carregarUsuarioPorId}" if="#{param.usuarioId != null}" />
+		</f:metadata>
+
+		<ui:define name="titulo">
+				Novo Usuario
+		</ui:define>
+
+		<ui:define name="conteudo">
+			<h:form id="usuario">
+				<fieldset>
+					<legend>Dados do Usuario</legend>
+					<p:panelGrid columns="1">
+
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{usuarioBean.usuario.nomeCompleto}"
+							required="true">
+							<f:validateLength minimum="5" />
+							<f:ajax event="blur" render="messageNome" />
+						</p:inputText>
+						<h:message for="nome" id="messageNome" />
+						
+						<p:outputLabel value="Email:" for="email" />
+						<p:inputText id="email" value="#{usuarioBean.usuario.email}" required="true">
+							<f:passThroughAttribute name="type" value="email" />
+						</p:inputText> 
+						
+						<p:outputLabel value="Apelido:" for="apelido" />
+						<p:inputText id="apelido" value="#{usuarioBean.usuario.apelido}" required="true">
+						</p:inputText>
+						
+						<p:outputLabel value="Senha:" for="senha" />
+						<p:password id="senha" value="#{usuarioBean.usuario.senha}" required="true"/>
+
+						<h:message for="email" id="messageEmail" />
+
+						<p:commandButton value="Gravar" action="#{usuarioBean.gravar}" />
+					 </p:panelGrid>
+				</fieldset>
+		
+			
+			</h:form>		
+		</ui:define>
+
+	</ui:composition>
+
+</html>
