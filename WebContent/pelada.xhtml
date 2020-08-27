@@ -19,9 +19,24 @@
 		</ui:define>
 
 		<ui:define name="conteudo">
-			<h:form>
+			<h:form id="frm">
 
 				<h:messages id="messages" />
+				
+				<p:toolbar id="toolbar">
+				      <f:facet name="left">
+				      
+				           <span class="ui-separator">
+				               <span class="ui-icon ui-icon-grip-dotted-vertical" />
+				           </span>
+				           
+				           <p:commandButton icon="ui-icon-pencil" title="Editar"
+				              disabled="#{peladaBean.peladaSelecionada == null}" />
+				           <p:commandButton icon="ui-icon-trash"  title="Excluir"
+				              disabled="#{peladaBean.peladaSelecionada == null}" />
+				           
+				      </f:facet>
+				</p:toolbar>
 
 				<fieldset>
 					<legend>Dados da Pelada</legend>
@@ -70,10 +85,19 @@
                                      update="tabelaPeladas" 
                                      ajax="false"
                                      process="@form">
+                         <f:setPropertyActionListener value="#{peladaBean.pelada}" target="#{peladaBean.peladaSelecionada}"/>            
                 </p:commandButton> 
 			
 			
-			    <p:dataTable value="#{peladaBean.getPeladas()}" var="pelada" id="tabelaPeladas">
+			    <p:dataTable value="#{peladaBean.getPeladas()}" var="pelada" id="tabelaPeladas" rows="10"
+			           paginator="true" paginatorPosition="bottom" 
+			           selection="#{peladaBean.peladaSelecionada}"
+			           selectionMode="single" rowKey="#{pelada.id}">
+			    
+			    <p:ajax event="rowSelect" update=":frm:toolbar" />     
+			    <p:ajax event="rowUnselect" update=":frm:toolbar" /> 
+			    
+			       
 				<p:column>
 					<f:facet name="header">Nome</f:facet>
 					<h:outputText value="#{pelada.nome}" />
@@ -95,6 +119,11 @@
 					<f:convertDateTime pattern=" HH:mm"	timeZone="America/Sao_Paulo" />
 					</h:outputText>
 				</p:column>
+				<p:column>
+					<f:facet name="header">Usuario</f:facet>
+					<h:outputText value="#{pelada.usuarios.get(0).nomeCompleto}" />
+				</p:column>
+				
 				
 				
 			    </p:dataTable>
