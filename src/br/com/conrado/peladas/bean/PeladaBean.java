@@ -50,6 +50,10 @@ public class PeladaBean implements Serializable {
 	public Pelada getPelada() {
 		return pelada;
 	}
+	
+	public void setPelada(Pelada pelada) {
+		this.pelada = pelada;
+	}
 
 	public List<Pelada> getPeladas() {
 		return this.peladas;
@@ -99,8 +103,10 @@ public class PeladaBean implements Serializable {
 
 	}
 
-	public void remover(Pelada pelada) {
-		new DAO<Pelada>(Pelada.class).remove(pelada);
+	public void remover() {
+		new DAO<Pelada>(Pelada.class).remove(peladaSelecionada);
+		peladaSelecionada = null;
+		peladas =  new DAO<Pelada>(Pelada.class).listaTodos();
 	}
 	
 	public void removerUsuario(Usuario usuario) {

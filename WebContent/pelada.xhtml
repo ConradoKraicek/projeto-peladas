@@ -30,17 +30,21 @@
 				               <span class="ui-icon ui-icon-grip-dotted-vertical" />
 				           </span>
 				           
-				           <p:commandButton icon="ui-icon-pencil" title="Editar"
-				              disabled="#{peladaBean.peladaSelecionada == null}" />
-				           <p:commandButton icon="ui-icon-trash"  title="Excluir"
-				              disabled="#{peladaBean.peladaSelecionada == null}" />
+				           <p:commandButton icon="ui-icon-pencil" title="Editar" process="@this" update="gridPelada" 
+				              disabled="#{peladaBean.peladaSelecionada == null}">
+				               <f:setPropertyActionListener value="#{peladaBean.peladaSelecionada}" target="#{peladaBean.pelada}"/> 
+				           </p:commandButton>
+				           
+				           <p:commandButton icon="ui-icon-trash"  title="Excluir" process="@this" action="#{peladaBean.remover}" update="tabelaPeladas" 
+				              disabled="#{peladaBean.peladaSelecionada == null}" >
+				           </p:commandButton>   
 				           
 				      </f:facet>
 				</p:toolbar>
 
 				<fieldset>
 					<legend>Dados da Pelada</legend>
-					<p:panelGrid columns="2">
+					<p:panelGrid columns="2" id="gridPelada">
 
 						<p:outputLabel value="Nome do Evento:" for="nome" />
 						<p:inputText id="nome" value="#{peladaBean.pelada.nome}"
@@ -85,7 +89,6 @@
                                      update="tabelaPeladas" 
                                      ajax="false"
                                      process="@form">
-                         <f:setPropertyActionListener value="#{peladaBean.pelada}" target="#{peladaBean.peladaSelecionada}"/>            
                 </p:commandButton> 
 			
 			
@@ -98,7 +101,7 @@
 			    <p:ajax event="rowUnselect" update=":frm:toolbar" /> 
 			    
 			       
-				<p:column>
+				<p:column sortBy="#{pelada.nome}">
 					<f:facet name="header">Nome</f:facet>
 					<h:outputText value="#{pelada.nome}" />
 				</p:column>
